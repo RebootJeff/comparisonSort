@@ -32,18 +32,18 @@ function ComparisonSort(am, w, h)
 }
 
 
-var ARRAY_SIZE_SMALL  = 50;
-var ARRAY_WIDTH_SMALL = 17;
-var ARRAY_BAR_WIDTH_SMALL = 10;
+var ARRAY_SIZE_SMALL  = 7;
+var ARRAY_WIDTH_SMALL = 30;
+var ARRAY_BAR_WIDTH_SMALL = 20;
 var ARRAY_INITIAL_X_SMALL = 15;
 
-var ARRAY_Y_POS = 250;
-var ARRAY_LABEL_Y_POS = 260;
+var ARRAY_Y_POS = 350;
+var ARRAY_LABEL_Y_POS = ARRAY_Y_POS + 10;
 
 var LOWER_ARRAY_Y_POS = 500;
-var LOWER_ARRAY_LABEL_Y_POS = 510;
+var LOWER_ARRAY_LABEL_Y_POS = LOWER_ARRAY_Y_POS + 10;
 
-var SCALE_FACTOR = 2.0;
+var SCALE_FACTOR = 8.0;
 
 var ARRAY_SIZE_LARGE = 200;
 var ARRAY_WIDTH_LARGE = 4;
@@ -71,14 +71,14 @@ ComparisonSort.prototype.init = function(am, w, h)
 	fn.call(this,am);
 	this.addControls();
 	this.nextIndex = 0;
-	
+
 	this.setArraySize(true);
 	this.arrayData = new Array(ARRAY_SIZE_LARGE);
 	this.arraySwap = new Array(ARRAY_SIZE_LARGE);
 	this.labelsSwap = new Array(ARRAY_SIZE_LARGE);
 	this.objectsSwap = new Array(ARRAY_SIZE_LARGE);
-	
-	this.createVisualObjects();	
+
+	this.createVisualObjects();
 }
 
 
@@ -110,7 +110,7 @@ ComparisonSort.prototype.addControls =  function()
 	this.sizeButton.onclick = this.changeSizeCallback.bind(this);
 }
 
-		
+
 ComparisonSort.prototype.setArraySize = function (small)
 {
 	if (small)
@@ -133,7 +133,7 @@ ComparisonSort.prototype.setArraySize = function (small)
 		this.array_label_y_pos = ARRAY_LABEL_Y_POS;
 		this.showLabels = false;
 	}
-	
+
 }
 
 
@@ -151,7 +151,7 @@ ComparisonSort.prototype.randomizeArray = function()
 	this.commands = new Array();
 	for (var i = 0; i < this.array_size; i++)
 	{
-		this.arrayData[i] = Math.floor(1 + Math.random()*99);
+		this.arrayData[i] = Math.floor(1 + Math.random()*30);
 		this.oldData[i] = this.arrayData[i];
 		if (this.showLabels)
 		{
@@ -159,14 +159,14 @@ ComparisonSort.prototype.randomizeArray = function()
 		}
 		else
 		{
-			this.cmd("SetText", this.barLabels[i], "");					
+			this.cmd("SetText", this.barLabels[i], "");
 		}
-		this.cmd("SetHeight", this.barObjects[i], this.arrayData[i] * SCALE_FACTOR);				
+		this.cmd("SetHeight", this.barObjects[i], this.arrayData[i] * SCALE_FACTOR);
 	}
 	this.animationManager.StartNewAnimation(this.commands);
 	this.animationManager.skipForward();
 	this.animationManager.clearHistory();
-	
+
 }
 
 
@@ -175,16 +175,16 @@ ComparisonSort.prototype.swap = function(index1, index2)
 	var tmp = this.arrayData[index1];
 	this.arrayData[index1] = this.arrayData[index2];
 	this.arrayData[index2] = tmp;
-	
+
 	tmp = this.barObjects[index1];
 	this.barObjects[index1] = this.barObjects[index2];
 	this.barObjects[index2] = tmp;
-	
+
 	tmp = this.barLabels[index1];
 	this.barLabels[index1] = this.barLabels[index2];
 	this.barLabels[index2] = tmp;
-	
-	
+
+
 	this.cmd("Move", this.barObjects[index1], this.barPositionsX[index1], this.array_y_pos);
 	this.cmd("Move", this.barObjects[index2], this.barPositionsX[index2], this.array_y_pos);
 	this.cmd("Move", this.barLabels[index1], this.barPositionsX[index1], this.array_label_y_pos);
@@ -198,17 +198,17 @@ ComparisonSort.prototype.createVisualObjects = function()
 	this.barObjects = new Array(this.array_size);
 	this.oldBarObjects= new Array(this.array_size);
 	this.oldbarLabels= new Array(this.array_size);
-	
+
 	this.barLabels = new Array(this.array_size);
-	this.barPositionsX = new Array(this.array_size);			
+	this.barPositionsX = new Array(this.array_size);
 	this.oldData = new Array(this.array_size);
 	this.obscureObject  = new Array(this.array_size);
-	
-	
+
+
 	var xPos = this.array_initial_x;
 	var yPos = this.array_y_pos;
 	var yLabelPos = this.array_label_y_pos;
-	
+
 	this.commands = new Array();
 	for (var i = 0; i < this.array_size; i++)
 	{
@@ -229,10 +229,10 @@ ComparisonSort.prototype.createVisualObjects = function()
 			this.cmd("CreateLabel", this.nextIndex, "", xPos, yLabelPos);
 		}
 		this.cmd("SetForegroundColor", this.nextIndex, INDEX_COLOR);
-		
+
 		this.barLabels[i] = this.nextIndex;
 		this.oldbarLabels[i] = this.barLabels[i];
-		++this.nextIndex;				
+		++this.nextIndex;
 	}
 	this.animationManager.StartNewAnimation(this.commands);
 	this.animationManager.skipForward();
@@ -262,7 +262,7 @@ ComparisonSort.prototype.highlightRange  = function(lowIndex, highIndex)
 			this.obscureObject[i] = false;
 			this.cmd("SetAlpha", this.barObjects[i], 1.0);
 			this.cmd("SetAlpha", this.barLabels[i], 1.0);
-		}				
+		}
 	}
 	for (i = highIndex+1; i < this.array_size; i++)
 	{
@@ -271,7 +271,7 @@ ComparisonSort.prototype.highlightRange  = function(lowIndex, highIndex)
 			this.obscureObject[i] = true;
 			this.cmd("SetAlpha", this.barObjects[i], 0.08);
 			this.cmd("SetAlpha", this.barLabels[i], 0.08);
-		}				
+		}
 	}
 }
 
@@ -281,7 +281,7 @@ ComparisonSort.prototype.reset = function()
 {
 	for (var i = 0; i < this.array_size; i++)
 	{
-		
+
 		this.arrayData[i]= this.oldData[i];
 		this.barObjects[i] = this.oldBarObjects[i];
 		this.barLabels[i] = this.oldbarLabels[i];
@@ -291,7 +291,7 @@ ComparisonSort.prototype.reset = function()
 		}
 		else
 		{
-			this.cmd("SetText", this.barLabels[i], "");					
+			this.cmd("SetText", this.barLabels[i], "");
 		}
 		this.cmd("SetHeight", this.barObjects[i], this.arrayData[i] * SCALE_FACTOR);
 	}
@@ -324,8 +324,8 @@ ComparisonSort.prototype.selectSortCallback = function(event)
 {
 	this.commands = new Array();
 	this.animationManager.clearHistory();
-	
-	
+
+
 	for (var i = 0; i < this.array_size - 1; i++)
 	{
 		var smallestIndex = i;
@@ -344,15 +344,15 @@ ComparisonSort.prototype.selectSortCallback = function(event)
 			}
 			else
 			{
-				this.cmd("SetForegroundColor", this.barObjects[j], BAR_FOREGROUND_COLOR);						
+				this.cmd("SetForegroundColor", this.barObjects[j], BAR_FOREGROUND_COLOR);
 				this.cmd("SetBackgroundColor", this.barObjects[j], BAR_BACKGROUND_COLOR);
-			}										
+			}
 		}
 		if (smallestIndex != i)
 		{
 			this.swap(smallestIndex, i);
 		}
-		this.cmd("SetForegroundColor", this.barObjects[i], BAR_FOREGROUND_COLOR);				
+		this.cmd("SetForegroundColor", this.barObjects[i], BAR_FOREGROUND_COLOR);
 		this.cmd("SetBackgroundColor", this.barObjects[i], BAR_BACKGROUND_COLOR);
 	}
 	this.animationManager.StartNewAnimation(this.commands);
@@ -360,7 +360,7 @@ ComparisonSort.prototype.selectSortCallback = function(event)
 ComparisonSort.prototype.bubbleSortCallback = function(event)
 {
 	this.animationManager.clearHistory();
-	
+
 	this.commands = new Array();
 	for (var i = this.array_size-1; i > 0; i--)
 	{
@@ -389,7 +389,7 @@ ComparisonSort.prototype.bubbleSortCallback = function(event)
 ComparisonSort.prototype.quickSortCallback = function(event)
 {
 	this.animationManager.clearHistory();
-	
+
 	this.commands = new Array();
 	this.iID = this.nextIndex++;
 	this.jID= this.nextIndex++;
@@ -397,9 +397,9 @@ ComparisonSort.prototype.quickSortCallback = function(event)
 	this.cmd("CreateLabel", this.jID, "j", this.barObjects[this.array_size - 1], this.array_label_y_pos + 20);
 	this.cmd("SetForegroundColor", this.iID, HIGHLIGHT_BAR_COLOR);
 	this.cmd("SetBackgroundColor", this.iID, HIGHLIGHT_BAR_BACKGROUND_COLOR);
-	this.cmd("SetForegroundColor", this.jID, HIGHLIGHT_BAR_COLOR);			
+	this.cmd("SetForegroundColor", this.jID, HIGHLIGHT_BAR_COLOR);
 	this.cmd("SetBackgroundColor", this.jID, HIGHLIGHT_BAR_BACKGROUND_COLOR);
-	this.doQuickSort(0, this.array_size - 1);			
+	this.doQuickSort(0, this.array_size - 1);
 	this.cmd("Delete", this.iID);
 	this.cmd("Delete", this.jID);
 	this.animationManager.StartNewAnimation(this.commands);
@@ -417,19 +417,19 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 	this.cmd("SetForegroundColor", lineID, QUICKSORT_LINE_COLOR);
 	var i = low+1;
 	var j = high;
-	
+
 	this.cmd("Move", this.iID, this.barPositionsX[i], this.array_label_y_pos + 20);
 	this.cmd("Move", this.jID, this.barPositionsX[j], this.array_label_y_pos + 20);
 	this.cmd("Step");
-	
+
 	while (i <= j)
 	{
-		
+
 		this.cmd("SetForegroundColor", this.barObjects[i], HIGHLIGHT_BAR_COLOR);
 		this.cmd("SetBackgroundColor", this.barObjects[i], HIGHLIGHT_BAR_BACKGROUND_COLOR);
 		this.cmd("SetForegroundColor", this.barObjects[low], HIGHLIGHT_BAR_COLOR);
 		this.cmd("SetBackgroundColor", this.barObjects[low], HIGHLIGHT_BAR_BACKGROUND_COLOR);
-		this.cmd("Step");	
+		this.cmd("Step");
 		this.cmd("SetForegroundColor", this.barObjects[low], BAR_FOREGROUND_COLOR);
 		this.cmd("SetBackgroundColor", this.barObjects[low], BAR_BACKGROUND_COLOR);
 
@@ -439,16 +439,16 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 		{
 			++i;
 			this.cmd("Move", this.iID, this.barPositionsX[i], this.array_label_y_pos + 20);
-			this.cmd("Step");	
+			this.cmd("Step");
 			this.cmd("SetForegroundColor", this.barObjects[low], HIGHLIGHT_BAR_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[low], HIGHLIGHT_BAR_BACKGROUND_COLOR);
 			this.cmd("SetForegroundColor", this.barObjects[i], HIGHLIGHT_BAR_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[i], HIGHLIGHT_BAR_BACKGROUND_COLOR);
-			this.cmd("Step");	
+			this.cmd("Step");
 			this.cmd("SetForegroundColor", this.barObjects[low], BAR_FOREGROUND_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[low], BAR_BACKGROUND_COLOR);
 
-			this.cmd("SetForegroundColor", this.barObjects[i], BAR_FOREGROUND_COLOR);				
+			this.cmd("SetForegroundColor", this.barObjects[i], BAR_FOREGROUND_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[i], BAR_BACKGROUND_COLOR);
 		}
 		this.cmd("SetForegroundColor", this.barObjects[j], HIGHLIGHT_BAR_COLOR);
@@ -457,7 +457,7 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 		this.cmd("SetForegroundColor", this.barObjects[low], HIGHLIGHT_BAR_COLOR);
 		this.cmd("SetBackgroundColor", this.barObjects[low], HIGHLIGHT_BAR_BACKGROUND_COLOR);
 
-		this.cmd("Step");	
+		this.cmd("Step");
 		this.cmd("SetForegroundColor", this.barObjects[j], BAR_FOREGROUND_COLOR);
 		this.cmd("SetBackgroundColor", this.barObjects[j], BAR_BACKGROUND_COLOR);
 
@@ -466,16 +466,16 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 
 		while (j >= i && this.arrayData[j] > pivot)
 		{
-			--j;			
+			--j;
 			this.cmd("Move", this.jID, this.barPositionsX[j], this.array_label_y_pos + 20);
-			this.cmd("Step");	
+			this.cmd("Step");
 			this.cmd("SetForegroundColor", this.barObjects[j], HIGHLIGHT_BAR_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[j], HIGHLIGHT_BAR_BACKGROUND_COLOR);
 
 			this.cmd("SetForegroundColor", this.barObjects[low], HIGHLIGHT_BAR_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[low], HIGHLIGHT_BAR_BACKGROUND_COLOR);
 
-			this.cmd("Step");					
+			this.cmd("Step");
 			this.cmd("SetForegroundColor", this.barObjects[j], BAR_FOREGROUND_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[j], BAR_BACKGROUND_COLOR);
 			this.cmd("SetForegroundColor", this.barObjects[low], BAR_FOREGROUND_COLOR);
@@ -485,7 +485,7 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 		{
 			this.cmd("Move", this.jID, this.barPositionsX[j-1], this.array_label_y_pos + 20);
 			this.cmd("Move", this.iID, this.barPositionsX[i+1], this.array_label_y_pos + 20);
-			
+
 			this.swap(i,j);
 			++i;
 			--j;
@@ -504,19 +504,19 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 
 	}
 	this.swap(low, j);
-	
+
 	this.cmd("Step");
-	this.cmd("Delete", lineID);	
-	
+	this.cmd("Delete", lineID);
+
 	this.doQuickSort(low, j-1);
 	this.doQuickSort(j+1,high);
 	this.highlightRange(low,high);
-}		
+}
 
 ComparisonSort.prototype.mergeSortCallback = function(event)
 {
 	this.animationManager.clearHistory();
-	
+
 	this.commands = new Array();
 	this.doMergeSort(0, this.array_size-1);
 	this.animationManager.StartNewAnimation(this.commands);
@@ -556,9 +556,9 @@ ComparisonSort.prototype.doMergeSort = function(low,high)
 				this.cmd("Step");
 				this.labelsSwap[insertIndex] = this.barLabels[rightIndex];
 				this.objectsSwap[insertIndex] = this.barObjects[rightIndex];
-				
+
 				insertIndex++;
-				rightIndex++;					
+				rightIndex++;
 			}
 		}
 		for (insertIndex = low; insertIndex <= high; insertIndex++)
@@ -569,19 +569,19 @@ ComparisonSort.prototype.doMergeSort = function(low,high)
 			this.cmd("Move", this.barObjects[insertIndex], this.barPositionsX[insertIndex], this.array_y_pos);
 			this.cmd("Move", this.barLabels[insertIndex], this.barPositionsX[insertIndex], this.array_label_y_pos);
 		}
-		this.cmd("Step");				
+		this.cmd("Step");
 	}
 	else
 	{
-		this.cmd("Step");				
+		this.cmd("Step");
 	}
-	
+
 }
 
 ComparisonSort.prototype.shellSortCallback = function(event)
 {
 	this.animationManager.clearHistory();
-	
+
 	this.commands = new Array();
 	var inc;
 	for (inc = Math.floor(this.array_size / 2); inc >=1; inc = Math.floor(inc / 2))
@@ -598,7 +598,7 @@ ComparisonSort.prototype.shellSortCallback = function(event)
 						this.cmd("SetAlpha", this.barObjects[k], 1.0);
 						this.cmd("SetAlpha", this.barLabels[k], 1.0);
 					}
-					
+
 				}
 				else
 				{
@@ -608,16 +608,16 @@ ComparisonSort.prototype.shellSortCallback = function(event)
 						this.cmd("SetAlpha", this.barObjects[k], 0.08);
 						this.cmd("SetAlpha", this.barLabels[k], 0.08);
 					}
-				}												
+				}
 			}
 			this.cmd("Step");
 			this.insertionSortSkip(inc, offset)
-			
+
 		}
-		
+
 	}
 	this.animationManager.StartNewAnimation(this.commands);
-	
+
 }
 
 ComparisonSort.prototype.insertionSortSkip = function(inc, offset)
@@ -645,9 +645,9 @@ ComparisonSort.prototype.insertionSortSkip = function(inc, offset)
 			this.cmd("SetForegroundColor", this.barObjects[j-inc], BAR_FOREGROUND_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[j], BAR_BACKGROUND_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[j - inc], BAR_BACKGROUND_COLOR);
-			j = j - inc;					
+			j = j - inc;
 		}
-		
+
 	}
 }
 
