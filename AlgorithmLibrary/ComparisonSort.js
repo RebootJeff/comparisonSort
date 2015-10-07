@@ -32,13 +32,13 @@ function ComparisonSort(am, w, h)
 }
 
 
-var ARRAY_SIZE_SMALL  = 7;
-var ARRAY_WIDTH_SMALL = 30;
-var ARRAY_BAR_WIDTH_SMALL = 20;
+var ARRAY_SIZE_SMALL  = 10;
+var ARRAY_WIDTH_SMALL = 50;
+var ARRAY_BAR_WIDTH_SMALL = 35;
 var ARRAY_INITIAL_X_SMALL = 15;
 
 var ARRAY_Y_POS = 350;
-var ARRAY_LABEL_Y_POS = ARRAY_Y_POS + 10;
+var ARRAY_LABEL_Y_POS = ARRAY_Y_POS + 20;
 
 var LOWER_ARRAY_Y_POS = 500;
 var LOWER_ARRAY_LABEL_Y_POS = LOWER_ARRAY_Y_POS + 10;
@@ -393,8 +393,8 @@ ComparisonSort.prototype.quickSortCallback = function(event)
 	this.commands = new Array();
 	this.iID = this.nextIndex++;
 	this.jID= this.nextIndex++;
-	this.cmd("CreateLabel", this.iID, "i", this.barObjects[0], this.array_label_y_pos + 20);
-	this.cmd("CreateLabel", this.jID, "j", this.barObjects[this.array_size - 1], this.array_label_y_pos + 20);
+	this.cmd("CreateLabel", this.iID, "i", this.barObjects[0], this.array_label_y_pos + 30);
+	this.cmd("CreateLabel", this.jID, "j", this.barObjects[this.array_size - 1], this.array_label_y_pos + 30);
 	this.cmd("SetForegroundColor", this.iID, HIGHLIGHT_BAR_COLOR);
 	this.cmd("SetBackgroundColor", this.iID, HIGHLIGHT_BAR_BACKGROUND_COLOR);
 	this.cmd("SetForegroundColor", this.jID, HIGHLIGHT_BAR_COLOR);
@@ -407,6 +407,9 @@ ComparisonSort.prototype.quickSortCallback = function(event)
 
 ComparisonSort.prototype.doQuickSort = function(low, high)
 {
+	var margin = 30;
+	var yPosWithMargin = this.array_label_y_pos + margin;
+
 	this.highlightRange(low,high);
 	if (high <= low)
 		return;
@@ -418,8 +421,8 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 	var i = low+1;
 	var j = high;
 
-	this.cmd("Move", this.iID, this.barPositionsX[i], this.array_label_y_pos + 20);
-	this.cmd("Move", this.jID, this.barPositionsX[j], this.array_label_y_pos + 20);
+	this.cmd("Move", this.iID, this.barPositionsX[i], yPosWithMargin);
+	this.cmd("Move", this.jID, this.barPositionsX[j], yPosWithMargin);
 	this.cmd("Step");
 
 	while (i <= j)
@@ -438,7 +441,7 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 		while (i <= j && this.arrayData[i] < pivot)
 		{
 			++i;
-			this.cmd("Move", this.iID, this.barPositionsX[i], this.array_label_y_pos + 20);
+			this.cmd("Move", this.iID, this.barPositionsX[i], yPosWithMargin);
 			this.cmd("Step");
 			this.cmd("SetForegroundColor", this.barObjects[low], HIGHLIGHT_BAR_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[low], HIGHLIGHT_BAR_BACKGROUND_COLOR);
@@ -467,7 +470,7 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 		while (j >= i && this.arrayData[j] > pivot)
 		{
 			--j;
-			this.cmd("Move", this.jID, this.barPositionsX[j], this.array_label_y_pos + 20);
+			this.cmd("Move", this.jID, this.barPositionsX[j], yPosWithMargin);
 			this.cmd("Step");
 			this.cmd("SetForegroundColor", this.barObjects[j], HIGHLIGHT_BAR_COLOR);
 			this.cmd("SetBackgroundColor", this.barObjects[j], HIGHLIGHT_BAR_BACKGROUND_COLOR);
@@ -483,8 +486,8 @@ ComparisonSort.prototype.doQuickSort = function(low, high)
 		}
 		if (i <= j)
 		{
-			this.cmd("Move", this.jID, this.barPositionsX[j-1], this.array_label_y_pos + 20);
-			this.cmd("Move", this.iID, this.barPositionsX[i+1], this.array_label_y_pos + 20);
+			this.cmd("Move", this.jID, this.barPositionsX[j-1], yPosWithMargin);
+			this.cmd("Move", this.iID, this.barPositionsX[i+1], yPosWithMargin);
 
 			this.swap(i,j);
 			++i;
